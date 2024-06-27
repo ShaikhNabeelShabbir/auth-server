@@ -6,6 +6,7 @@
   "dependencies": {
     "@hono/node-server": "^1.11.4",
     "argon2": "^0.40.3",
+    "dotenv": "^16.4.5",
     "hono": "^4.4.8",
     "jsonwebtoken": "^9.0.2",
     "sqlite": "^5.1.1",

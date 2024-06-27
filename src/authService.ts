@@ -2,7 +2,10 @@ import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import { getUserByEmail, createUser } from "./user";
 import dbPromise from "./db";
-const JWT_SECRET = "Nabeel@03";
+import dotenv from "dotenv";
+dotenv.config();
+
+const JWT_SECRET = String(process.env.JWT_SECRET);
 
 // defining the functionality behind signin singup and reset password
 export const signUp = async (
@@ -24,7 +27,6 @@ export const signIn = async (
   const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1h" });
   return token;
 };
-
 
 export const resetPassword = async (
   email: string,

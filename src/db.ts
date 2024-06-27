@@ -3,7 +3,7 @@ import { open, Database } from "sqlite";
 
 // Open the database connection
 const dbPromise = open({
-  filename: "./database.db",
+  filename: String(process.env.DATABASE_FILENAME),
   driver: sqlite3.Database,
 });
 
