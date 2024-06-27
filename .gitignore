@@ -26,6 +26,4 @@ lerna-debug.log*
 
 # misc
 .DS_Store
-
-*.json
 *.db
