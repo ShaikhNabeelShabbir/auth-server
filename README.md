@@ -14,3 +14,10 @@ like app and server of express
 the authroutes define the routes
 which are controlled and served using
 authController and authservices respectively
+
+You will need to configure the env file in your project directory
+PORT
+JWT_SECRET
+DATABASE_FILENAME
+
+Refer to .env.example file for more information
