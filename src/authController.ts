@@ -1,5 +1,9 @@
 import { Context } from "hono";
+import jwt from "jsonwebtoken";
 import { signUp, signIn, resetPassword } from "./authService";
+import dotenv from "dotenv";
+dotenv.config();
+const JWT_SECRET = String(process.env.JWT_SECRET);
 
 interface SignUpBody {
   email: string;
@@ -21,7 +25,8 @@ export const handleSignUp = async (c: Context): Promise<Response> => {
   const body = await c.req.json<SignUpBody>();
   const { email, password } = body;
   await signUp(email, password);
-  return c.json({ message: "User created successfully" });
+  const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1h" });
+  return c.json({ message: "User created successfully", token });
 };
 
 export const handleSignIn = async (c: Context): Promise<Response> => {
