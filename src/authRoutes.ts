@@ -8,6 +8,7 @@ import {
   handleDeleteToken,
   handleUpdateToken,
 } from "./authController";
+import { authMiddleware } from "./authMiddleware"; // Adjust the path as needed
 
 const authRoutes = new Hono();
 
@@ -15,8 +16,9 @@ const authRoutes = new Hono();
 authRoutes.post("/signup", handleSignUp);
 authRoutes.post("/signin", handleSignIn);
 authRoutes.post("/reset-password", handleResetPassword);
-authRoutes.post("/show-token", handleGetTokens);
-authRoutes.delete("delete-token", handleDeleteToken);
-authRoutes.patch("update-token", handleUpdateToken);
+
+authRoutes.post("/show-token", authMiddleware, handleGetTokens);
+authRoutes.delete("delete-token", authMiddleware, handleDeleteToken);
+authRoutes.patch("update-token", authMiddleware, handleUpdateToken);
 
 export { authRoutes };
