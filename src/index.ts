@@ -8,7 +8,7 @@ dotenv.config();
 // To create a new Hono instance
 const app = new Hono();
 app.get("/", (c) => {
-  return c.html("<h1>Hello Hono!</h1>");
+  return c.html("<h1>Hello OCG</h1>");
 });
 
 app.use("*", prettyJSON());

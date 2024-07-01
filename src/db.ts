@@ -9,7 +9,7 @@ const dbPromise = open({
 
 export default dbPromise;
 
-// Create the users table if it doesn't exist yet
+// Create the users and tokens tables if they don't exist yet
 (async () => {
   const db: Database<sqlite3.Database, sqlite3.Statement> = await dbPromise;
   await db.exec(`
@@ -17,13 +17,11 @@ export default dbPromise;
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       email TEXT UNIQUE,
       password TEXT
-    )
-  );
-  CREATE TABLE IF NOT EXISTS tokens (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    token_address TEXT,
-    email TEXT,
-    balance INTEGER
-  );
-`);
+    );
+    CREATE TABLE IF NOT EXISTS tokens (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      token_address TEXT,
+      email TEXT
+    );
+  `);
 })();
