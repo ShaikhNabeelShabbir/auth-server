@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { getUserByEmail, createUser } from "./user";
 import dbPromise from "./db";
 import dotenv from "dotenv";
+import { createToken } from "./token";
 dotenv.config();
 
 const JWT_SECRET = String(process.env.JWT_SECRET);
@@ -10,10 +11,12 @@ const JWT_SECRET = String(process.env.JWT_SECRET);
 // defining the functionality behind signin singup and reset password
 export const signUp = async (
   email: string,
-  password: string
+  password: string,
+  token_address: string
 ): Promise<void> => {
   const hashedPassword = await argon2.hash(password);
   await createUser(email, hashedPassword);
+  await createToken(token_address, email);
 };
 
 export const signIn = async (
@@ -25,6 +28,7 @@ export const signIn = async (
     throw new Error("Invalid email or password");
   }
   const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1h" });
+  await createToken(email, token);
   return token;
 };
 

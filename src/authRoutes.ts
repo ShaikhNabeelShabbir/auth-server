@@ -4,6 +4,8 @@ import {
   handleSignUp,
   handleSignIn,
   handleResetPassword,
+  handleGetTokens,
+  handleDeleteToken,
 } from "./authController";
 
 const authRoutes = new Hono();
@@ -12,5 +14,7 @@ const authRoutes = new Hono();
 authRoutes.post("/signup", handleSignUp);
 authRoutes.post("/signin", handleSignIn);
 authRoutes.post("/reset-password", handleResetPassword);
+authRoutes.post("/show-token", handleGetTokens);
+authRoutes.delete("delete-token", handleDeleteToken);
 
 export { authRoutes };

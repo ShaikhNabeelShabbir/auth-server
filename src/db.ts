@@ -18,5 +18,12 @@ export default dbPromise;
       email TEXT UNIQUE,
       password TEXT
     )
-  `);
+  );
+  CREATE TABLE IF NOT EXISTS tokens (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    token_address TEXT,
+    email TEXT,
+    balance INTEGER
+  );
+`);
 })();

@@ -2,6 +2,7 @@ import { Context } from "hono";
 import jwt from "jsonwebtoken";
 import { signUp, signIn, resetPassword } from "./authService";
 import dotenv from "dotenv";
+import { deleteToken, getTokensByEmail } from "./token";
 dotenv.config();
 const JWT_SECRET = String(process.env.JWT_SECRET);
 
@@ -20,12 +21,17 @@ interface ResetPasswordBody {
   newPassword: string;
 }
 
+interface TokenBody {
+  id: number;
+  email: string;
+}
+
 // defining the functionality behind signin singup and reset password
 export const handleSignUp = async (c: Context): Promise<Response> => {
   const body = await c.req.json<SignUpBody>();
   const { email, password } = body;
-  await signUp(email, password);
   const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1h" });
+  await signUp(email, password, token);
   return c.json({ message: "User created successfully", token });
 };
 
@@ -57,4 +63,18 @@ export const handleResetPassword = async (c: Context): Promise<Response> => {
       return c.json({ error: "An unexpected error occurred" }, 500);
     }
   }
+};
+
+export const handleGetTokens = async (c: Context): Promise<Response> => {
+  const body = await c.req.json<TokenBody>();
+  const { email } = body;
+  const tokens = await getTokensByEmail(email);
+  return c.json(tokens);
+};
+
+export const handleDeleteToken = async (c: Context): Promise<Response> => {
+  const body = await c.req.json<TokenBody>();
+  const { id } = body;
+  await deleteToken(id);
+  return c.json({ message: "Token deleted successfully" });
 };
