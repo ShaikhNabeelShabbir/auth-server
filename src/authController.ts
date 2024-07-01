@@ -2,7 +2,7 @@ import { Context } from "hono";
 import jwt from "jsonwebtoken";
 import { signUp, signIn, resetPassword } from "./authService";
 import dotenv from "dotenv";
-import { deleteToken, getTokensByEmail } from "./token";
+import { deleteToken, getTokensByEmail, updateToken } from "./token";
 dotenv.config();
 const JWT_SECRET = String(process.env.JWT_SECRET);
 
@@ -24,6 +24,7 @@ interface ResetPasswordBody {
 interface TokenBody {
   id: number;
   email: string;
+  balance: number;
 }
 
 // defining the functionality behind signin singup and reset password
@@ -77,4 +78,11 @@ export const handleDeleteToken = async (c: Context): Promise<Response> => {
   const { id } = body;
   await deleteToken(id);
   return c.json({ message: "Token deleted successfully" });
+};
+
+export const handleUpdateToken = async (c: Context): Promise<Response> => {
+  const body = await c.req.json<TokenBody>();
+  const { id, balance } = body;
+  await updateToken(id, balance);
+  return c.json({ message: "Token updated successfully" });
 };

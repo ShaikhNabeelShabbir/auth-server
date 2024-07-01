@@ -28,3 +28,11 @@ export const deleteToken = async (id: number): Promise<void> => {
   const db = await dbPromise;
   await db.run("DELETE FROM tokens WHERE id = ?", id);
 };
+
+export const updateToken = async (
+  id: number,
+  balance: number
+): Promise<void> => {
+  const db = await dbPromise;
+  await db.run("update tokens SET balance = ? WHERE id = ?", balance, id);
+};
