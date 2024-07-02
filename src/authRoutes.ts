@@ -8,7 +8,7 @@ import {
   handleDeleteToken,
   handleUpdateToken,
 } from "./authController";
-import { authMiddleware } from "./authMiddleware"; // Adjust the path as needed
+import { authMiddleware } from "./authMiddleware"; 
 
 const authRoutes = new Hono();
 
