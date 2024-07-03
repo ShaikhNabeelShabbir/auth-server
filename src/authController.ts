@@ -97,16 +97,13 @@ export const handleResetPassword = async (c: Context): Promise<Response> => {
 export const handleCreateToken = async (c: Context): Promise<Response> => {
   const body = await c.req.json<TokenBody>();
   const validation = createTokenSchema.safeParse(body);
-
   if (!validation.success) {
     return c.json({ error: validation.error.errors }, 400);
   }
-
   const { token_address, balance, email } = validation.data;
   if (!token_address || !balance || !email) {
     return c.json({ error: "Missing required fields" });
   }
-
   try {
     await createToken(email, token_address, balance);
     return c.json({ message: "Token created successfully" });
@@ -124,14 +121,11 @@ export const handleGetTokens = async (c: Context): Promise<Response> => {
   }
   const { email } = validation.data;
   if (!email) {
-    return c.json({ error: "Unauthorized" }, 401);
+    return c.json({ error: "Missing required fields" }, 400);
   }
-  try {
-    const tokens = await getTokensByEmail(email);
-    return c.json(tokens);
-  } catch (error) {
-    return c.json({ error: "An internal server error occurred" }, 500);
-  }
+  console.log(email);
+  const tokens = await getTokensByEmail(email);
+  return c.json(tokens);
 };
 
 // Handle Update Token
