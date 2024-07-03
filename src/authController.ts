@@ -96,9 +96,9 @@ export const handleResetPassword = async (c: Context): Promise<Response> => {
 
 export const handleCreateToken = async (c: Context): Promise<Response> => {
   const body = await c.req.json<TokenBody>();
-  const validation = createTokenSchema.safeParse(body);
   const email = c.get("email");
-  console.log(email);
+  const validation = createTokenSchema.safeParse(body, email);
+  console.log("hct", email);
   if (!validation.success) {
     return c.json({ error: validation.error.errors }, 400);
   }

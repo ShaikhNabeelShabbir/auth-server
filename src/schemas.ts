@@ -13,7 +13,6 @@ export const signInSchema = z.object({
 export const createTokenSchema = z.object({
   token_address: z.string(),
   balance: z.number().positive(),
-  email: z.string().email(),
 });
 
 export const updateTokenSchema = z.object({
