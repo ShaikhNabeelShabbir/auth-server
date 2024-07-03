@@ -7,18 +7,22 @@ import {
   handleGetTokens,
   handleDeleteToken,
   handleUpdateToken,
+  handleCreateToken,
 } from "./authController";
-import { authMiddleware } from "./authMiddleware"; 
+import { authMiddleware } from "./authMiddleware"; // Adjust the path as needed
 
 const authRoutes = new Hono();
 
 //defining the auth routes with the respective auth functions
+authRoutes.use("/tokens/*", authMiddleware);
+
 authRoutes.post("/signup", handleSignUp);
 authRoutes.post("/signin", handleSignIn);
 authRoutes.post("/reset-password", handleResetPassword);
 
-authRoutes.post("/show-token", authMiddleware, handleGetTokens);
-authRoutes.delete("delete-token", authMiddleware, handleDeleteToken);
-authRoutes.patch("update-token", authMiddleware, handleUpdateToken);
+authRoutes.get("/tokens", authMiddleware, handleGetTokens);
+authRoutes.post("/tokens", authMiddleware, handleCreateToken);
+authRoutes.patch("/tokens/:id", authMiddleware, handleUpdateToken);
+authRoutes.delete("/tokens/:id", authMiddleware, handleDeleteToken);
 
 export { authRoutes };

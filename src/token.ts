@@ -14,13 +14,15 @@ export const getTokensByEmail = async (email: string): Promise<Token[]> => {
 
 export const createToken = async (
   email: string,
-  token_address: string
+  token_address: string,
+  balance: number
 ): Promise<void> => {
   const db = await dbPromise;
   await db.run(
-    "INSERT INTO tokens (token_address, email) VALUES (?, ?)",
+    "INSERT INTO tokens (token_address,email, balance) VALUES (?,?, ?)",
+    email,
     token_address,
-    email
+    balance
   );
 };
 
@@ -30,9 +32,13 @@ export const deleteToken = async (id: number): Promise<void> => {
 };
 
 export const updateToken = async (
-  id: number,
+  token_address: string,
   balance: number
 ): Promise<void> => {
   const db = await dbPromise;
-  await db.run("update tokens SET balance = ? WHERE id = ?", balance, id);
+  await db.run(
+    "update tokens SET balance = ? WHERE token_address = ?",
+    balance,
+    token_address
+  );
 };

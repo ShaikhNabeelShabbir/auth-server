@@ -26,7 +26,7 @@ export default dbPromise;
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       token_address TEXT,
       email TEXT,
-      balance INTEGER default 100
+      balance INTEGER default 00
     );
   `);
 })();

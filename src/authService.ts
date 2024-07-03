@@ -16,7 +16,6 @@ export const signUp = async (
 ): Promise<void> => {
   const hashedPassword = await argon2.hash(password);
   await createUser(email, hashedPassword);
-  await createToken(token_address, email);
 };
 
 export const signIn = async (
@@ -28,7 +27,6 @@ export const signIn = async (
     throw new Error("Invalid email or password");
   }
   const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1h" });
-  await createToken(email, token);
   return token;
 };
 

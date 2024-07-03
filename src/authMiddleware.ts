@@ -1,22 +1,28 @@
 import { Context, Next } from "hono";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = "Nabeel@03";
+const JWT_SECRET = String(process.env.JWT_SECRET);
+
+export interface DecodedToken {
+  userId: string;
+  email: string;
+  iat: number;
+  exp: number;
+}
 
 export const authMiddleware = async (c: Context, next: Next) => {
   const authHeader = c.req.header("authorization");
-  if (!authHeader) {
-    return c.json({ error: "Authorization header missing" }, 401);
-  }
-  const token = authHeader.split(" ")[1];
-  if (!token) {
-    return c.json({ error: "Token missing" }, 401);
-  }
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
-    c.set("user", decoded);
-    await next();
-  } catch (error) {
-    return c.json({ error: "Invalid token" }, 401);
+  if (typeof authHeader !== "undefined") {
+    const bearer = authHeader.split(" ");
+    const bearerToken = bearer[1];
+    try {
+      const decoded = jwt.verify(bearerToken, JWT_SECRET) as DecodedToken;
+      c.set("user", decoded);
+      await next();
+    } catch (error) {
+      return c.json({ result: "token is invalid" }, 401);
+    }
+  } else {
+    return c.json({ result: "Authorization header missing" }, 401);
   }
 };
