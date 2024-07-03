@@ -18,6 +18,8 @@ export const authMiddleware = async (c: Context, next: Next) => {
     try {
       const decoded = jwt.verify(bearerToken, JWT_SECRET) as DecodedToken;
       c.set("user", decoded);
+      c.set("email", decoded.email);
+      console.log("the mail", decoded.email);
       await next();
     } catch (error) {
       return c.json({ result: "token is invalid" }, 401);

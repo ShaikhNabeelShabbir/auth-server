@@ -26,7 +26,11 @@ export const signIn = async (
   if (!user || !(await argon2.verify(user.password, password))) {
     throw new Error("Invalid email or password");
   }
-  const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1h" });
+  const payload = {
+    userId: user.id,
+    email: user.email  // Include email in the payload
+  };
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
   return token;
 };
 

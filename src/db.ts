@@ -24,8 +24,8 @@ export default dbPromise;
   await db.exec(`
     CREATE TABLE IF NOT EXISTS tokens (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      token_address TEXT,
       email TEXT,
+      token_address TEXT,
       balance INTEGER default 00
     );
   `);

@@ -97,13 +97,17 @@ export const handleResetPassword = async (c: Context): Promise<Response> => {
 export const handleCreateToken = async (c: Context): Promise<Response> => {
   const body = await c.req.json<TokenBody>();
   const validation = createTokenSchema.safeParse(body);
+  const email = c.get("email");
+  console.log(email);
   if (!validation.success) {
     return c.json({ error: validation.error.errors }, 400);
   }
-  const { token_address, balance, email } = validation.data;
-  if (!token_address || !balance || !email) {
+
+  const { token_address, balance } = validation.data;
+  if (!token_address || !balance) {
     return c.json({ error: "Missing required fields" });
   }
+
   try {
     await createToken(email, token_address, balance);
     return c.json({ message: "Token created successfully" });
@@ -114,18 +118,15 @@ export const handleCreateToken = async (c: Context): Promise<Response> => {
 };
 
 export const handleGetTokens = async (c: Context): Promise<Response> => {
-  const body = await c.req.json<TokenBody>();
-  const validation = getTokenSchema.safeParse(body);
-  if (!validation.success) {
-    return c.json({ error: validation.error.errors }, 400);
+  const email = c.get("email");
+  console.log("from handler", email);
+
+  try {
+    const tokens = await getTokensByEmail(email);
+    return c.json(tokens);
+  } catch (error) {
+    return c.json({ error: "An internal server error occurred" }, 500);
   }
-  const { email } = validation.data;
-  if (!email) {
-    return c.json({ error: "Missing required fields" }, 400);
-  }
-  console.log(email);
-  const tokens = await getTokensByEmail(email);
-  return c.json(tokens);
 };
 
 // Handle Update Token

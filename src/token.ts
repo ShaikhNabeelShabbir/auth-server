@@ -8,8 +8,20 @@ interface Token {
 }
 
 export const getTokensByEmail = async (email: string): Promise<Token[]> => {
+  console.log("from get tokens by email");
+  console.log("Email being queried:", email);
   const db = await dbPromise;
-  return db.all("SELECT * FROM tokens WHERE email = ?", email);
+  try {
+    const tokens: Token[] = await db.all(
+      "SELECT * FROM tokens WHERE email = ?",
+      email
+    );
+    console.log("Tokens found:", tokens);
+    return tokens;
+  } catch (error) {
+    console.error("Database error:", error);
+    throw new Error("Failed to fetch tokens from the database");
+  }
 };
 
 export const createToken = async (
@@ -19,7 +31,7 @@ export const createToken = async (
 ): Promise<void> => {
   const db = await dbPromise;
   await db.run(
-    "INSERT INTO tokens (token_address,email, balance) VALUES (?,?, ?)",
+    "INSERT INTO tokens (email,token_address, balance) VALUES (?,?, ?)",
     email,
     token_address,
     balance
