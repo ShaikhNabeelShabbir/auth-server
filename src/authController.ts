@@ -15,6 +15,7 @@ import {
   createToken,
   deleteToken,
   getTokensByEmail,
+  getTokensByTokenAddress,
   updateToken,
 } from "./token";
 dotenv.config();
@@ -165,5 +166,23 @@ export const handleDeleteToken = async (c: Context): Promise<Response> => {
     return c.json({ message: "Token deleted successfully" });
   } catch (error) {
     return c.json({ error: "Failed to delete token" });
+  }
+};
+
+export const handleGetSingularTokens = async (
+  c: Context
+): Promise<Response> => {
+  const email = c.get("email");
+  console.log("from handler gst ", email);
+  const body = await c.req.json<TokenBody>();
+  const { token_address } = body;
+  //const email = c.get("email");
+  console.log("from handler gst ", email, token_address);
+
+  try {
+    const tokens = await getTokensByTokenAddress(email, token_address);
+    return c.json(tokens);
+  } catch (error) {
+    return c.json({ error: "An internal server error occurred" }, 500);
   }
 };

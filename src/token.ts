@@ -54,3 +54,24 @@ export const updateToken = async (
     token_address
   );
 };
+
+export const getTokensByTokenAddress = async (
+  email: string,
+  token_address: string
+): Promise<Token[]> => {
+  console.log("from get tokens by email");
+  console.log("Email being queried:", email);
+  const db = await dbPromise;
+  try {
+    const tokens: Token[] = await db.all(
+      "SELECT * FROM tokens WHERE email = ? and token_address = ?",
+      email,
+      token_address
+    );
+    console.log("Tokens found:", tokens);
+    return tokens;
+  } catch (error) {
+    console.error("Database error:", error);
+    throw new Error("Failed to fetch tokens from the database");
+  }
+};

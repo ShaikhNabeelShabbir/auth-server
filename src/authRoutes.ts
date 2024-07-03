@@ -8,6 +8,7 @@ import {
   handleDeleteToken,
   handleUpdateToken,
   handleCreateToken,
+  handleGetSingularTokens,
 } from "./authController";
 import { authMiddleware } from "./authMiddleware"; // Adjust the path as needed
 
@@ -24,5 +25,7 @@ authRoutes.get("/tokens", authMiddleware, handleGetTokens);
 authRoutes.post("/tokens", authMiddleware, handleCreateToken);
 authRoutes.patch("/tokens/:id", authMiddleware, handleUpdateToken);
 authRoutes.delete("/tokens/:id", authMiddleware, handleDeleteToken);
+
+authRoutes.post("/singulartoken", authMiddleware, handleGetSingularTokens);
 
 export { authRoutes };
