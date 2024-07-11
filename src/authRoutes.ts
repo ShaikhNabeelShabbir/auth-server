@@ -26,6 +26,6 @@ authRoutes.post("/tokens", authMiddleware, handleCreateToken);
 authRoutes.patch("/tokens/:id", authMiddleware, handleUpdateToken);
 authRoutes.delete("/tokens/:id", authMiddleware, handleDeleteToken);
 
-authRoutes.post("/singulartoken", authMiddleware, handleGetSingularTokens);
+authRoutes.post("/single-token", authMiddleware, handleGetSingularTokens);
 
 export { authRoutes };
